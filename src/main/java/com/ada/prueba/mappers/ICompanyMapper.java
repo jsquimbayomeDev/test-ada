@@ -2,7 +2,7 @@ package com.ada.prueba.mappers;
 
 import com.ada.prueba.commons.dtos.entry.CompanyEntryDTO;
 import com.ada.prueba.commons.dtos.exit.CompanyExitDTO;
-import com.ada.prueba.models.Company;
+import com.ada.prueba.domain.models.Company;
 
 import java.util.List;
 

@@ -2,8 +2,10 @@ package com.ada.prueba.mappers.impl;
 
 import com.ada.prueba.commons.dtos.entry.CompanyEntryDTO;
 import com.ada.prueba.commons.dtos.exit.CompanyExitDTO;
+import com.ada.prueba.domain.models.Version;
+import com.ada.prueba.domain.models.VersionCompany;
 import com.ada.prueba.mappers.ICompanyMapper;
-import com.ada.prueba.models.Company;
+import com.ada.prueba.domain.models.Company;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,10 +31,13 @@ public class CompanyMapper implements ICompanyMapper {
             throw new IllegalArgumentException("The company cannot be null");
         }
         return new CompanyExitDTO(
-                company.getId(),
+                company.getCompanyId(),
                 company.getCompanyCode(),
                 company.getCompanyName(),
-                company.getCompanyDescription()
+                company.getCompanyDescription(),
+                company.getVersionCompany().get(0).getVersion().getApplication().getAppName(),
+                company.getVersionCompany().get(0).getVersion().getVersion()
+
         );
     }
 

@@ -11,4 +11,6 @@ public class CompanyExitDTO {
     private String companyCode;
     private String companyName;
     private String companyDescription;
+    private String appName;
+    private String version;
 }

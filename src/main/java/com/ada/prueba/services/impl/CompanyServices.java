@@ -5,14 +5,13 @@ import com.ada.prueba.commons.dtos.exit.CompanyExitDTO;
 import com.ada.prueba.commons.exceptions.AlreadyExistsException;
 import com.ada.prueba.commons.exceptions.NotFoundException;
 import com.ada.prueba.mappers.ICompanyMapper;
-import com.ada.prueba.models.Company;
-import com.ada.prueba.repository.CompanyRepository;
+import com.ada.prueba.domain.models.Company;
+import com.ada.prueba.domain.repository.CompanyRepository;
 import com.ada.prueba.services.ICompanyServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompanyServices implements ICompanyServices {
