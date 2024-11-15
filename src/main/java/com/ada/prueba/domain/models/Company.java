@@ -4,6 +4,7 @@ package com.ada.prueba.domain.models;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -66,5 +67,18 @@ public class Company {
 
     public void setVersionCompany(List<VersionCompany> versionCompany) {
         this.versionCompany = versionCompany;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company that = (Company) o;
+        return Objects.equals(companyName, that.companyName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyName);
     }
 }

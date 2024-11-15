@@ -11,7 +11,9 @@ import com.ada.prueba.services.ICompanyServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CompanyServices implements ICompanyServices {
@@ -36,7 +38,9 @@ public class CompanyServices implements ICompanyServices {
     @Override
     public List<CompanyExitDTO> getAllCompany() {
         List<Company> companies =  companyRepository.findAll();
-        return companyMapper.mapCompanyToCompanyExitList(companies);
+        //we use a HasSet for eliminate a duplicate elements
+        Set<Company> uniqueCompanies = new HashSet<>(companies);
+        return companyMapper.mapCompanyToCompanyExitList(uniqueCompanies.stream().toList());
     }
 
     @Override
