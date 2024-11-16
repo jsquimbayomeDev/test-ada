@@ -6,7 +6,9 @@ import com.ada.prueba.commons.exceptions.AlreadyExistsException;
 import com.ada.prueba.commons.exceptions.NotFoundException;
 import com.ada.prueba.mappers.ICompanyMapper;
 import com.ada.prueba.domain.models.Company;
+import com.ada.prueba.domain.models.Version;
 import com.ada.prueba.domain.repository.CompanyRepository;
+import com.ada.prueba.domain.repository.VersionRepository; // Importar
 import com.ada.prueba.services.ICompanyServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +24,21 @@ public class CompanyServices implements ICompanyServices {
     CompanyRepository companyRepository;
 
     @Autowired
+    VersionRepository versionRepository; // Inyectar
+
+    @Autowired
     ICompanyMapper companyMapper;
 
     @Override
     public CompanyExitDTO createCompany(CompanyEntryDTO companyEntryDTO) {
 
         companyRepository.findByCompanyCode(
-                companyEntryDTO.getCompanyCode()).ifPresent(c -> { throw  new AlreadyExistsException("company already exists");});
-        Company company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO);
+                companyEntryDTO.getCompanyCode()).ifPresent(c -> { throw new AlreadyExistsException("company already exists");});
+
+        Version version = versionRepository.findByApplicationAppCodeAndVersion(
+                companyEntryDTO.getAppCode(), companyEntryDTO.getVersion()).orElseThrow(() -> new NotFoundException("version not found"));
+
+        Company company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO, version);
         companyRepository.save(company);
 
         return companyMapper.mapCompanyToCompanyExit(company);
@@ -37,16 +46,14 @@ public class CompanyServices implements ICompanyServices {
 
     @Override
     public List<CompanyExitDTO> getAllCompany() {
-        List<Company> companies =  companyRepository.findAll();
-        //we use a HasSet for eliminate a duplicate elements
+        List<Company> companies = companyRepository.findAll();
         Set<Company> uniqueCompanies = new HashSet<>(companies);
         return companyMapper.mapCompanyToCompanyExitList(uniqueCompanies.stream().toList());
     }
 
     @Override
     public CompanyExitDTO getCompanyByCode(String code) {
-        Company company =  companyRepository.findByCompanyCode(code).orElseThrow(() -> new NotFoundException("company not found"));
-
+        Company company = companyRepository.findByCompanyCode(code).orElseThrow(() -> new NotFoundException("company not found"));
         return companyMapper.mapCompanyToCompanyExit(company);
     }
 
@@ -55,7 +62,10 @@ public class CompanyServices implements ICompanyServices {
         Company company = companyRepository.findByCompanyCode(
                 companyEntryDTO.getCompanyCode()).orElseThrow(() -> new NotFoundException("company not found"));
 
-        company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO);
+        Version version = versionRepository.findByApplicationAppCodeAndVersion(
+                companyEntryDTO.getAppCode(), companyEntryDTO.getVersion()).orElseThrow(() -> new NotFoundException("version not found"));
+
+        company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO, version);
         companyRepository.save(company);
 
         return companyMapper.mapCompanyToCompanyExit(company);

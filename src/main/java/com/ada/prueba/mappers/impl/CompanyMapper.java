@@ -14,15 +14,22 @@ import java.util.stream.Collectors;
 @Component
 public class CompanyMapper implements ICompanyMapper {
 
-    public Company mapperCompanyEntryToCompany(CompanyEntryDTO companyEntryDTO) {
+    public Company mapperCompanyEntryToCompany(CompanyEntryDTO companyEntryDTO, Version version) {
         if (companyEntryDTO == null) {
             throw new IllegalArgumentException("The companyEntryDTO cannot be null");
         }
-        return new Company(
+        Company company = new Company(
                 companyEntryDTO.getCompanyCode(),
                 companyEntryDTO.getCompanyName(),
                 companyEntryDTO.getCompanyDescription()
         );
+
+        VersionCompany versionCompany = new VersionCompany();
+        versionCompany.setCompany(company);
+        versionCompany.setVersion(version);
+        company.setVersionCompany(List.of(versionCompany));
+
+        return company;
     }
 
     @Override
@@ -37,7 +44,6 @@ public class CompanyMapper implements ICompanyMapper {
                 company.getCompanyDescription(),
                 company.getVersionCompany().get(0).getVersion().getApplication().getAppName(),
                 company.getVersionCompany().get(0).getVersion().getVersion()
-
         );
     }
 
@@ -45,6 +51,4 @@ public class CompanyMapper implements ICompanyMapper {
     public List<CompanyExitDTO> mapCompanyToCompanyExitList(List<Company> companies) {
         return companies.stream().map(this::mapCompanyToCompanyExit).collect(Collectors.toList());
     }
-
-
 }

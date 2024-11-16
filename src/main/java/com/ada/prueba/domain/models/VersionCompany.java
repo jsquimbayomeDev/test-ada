@@ -4,7 +4,7 @@ package com.ada.prueba.domain.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table (name = "application")
+@Table(name = "version_company", uniqueConstraints = { @UniqueConstraint(columnNames = {"companyId", "versionId"}) })
 public class VersionCompany {
 
     @Id

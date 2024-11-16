@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class CompanyEntryDTO {
 
-
     @NotNull
     @Min(1)
     private String companyCode;
@@ -21,4 +20,10 @@ public class CompanyEntryDTO {
 
     @NotNull
     private String companyDescription;
+
+    @NotNull
+    private String appCode;
+
+    @NotNull
+    private String version;
 }

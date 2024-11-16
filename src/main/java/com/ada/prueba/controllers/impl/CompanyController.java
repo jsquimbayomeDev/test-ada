@@ -19,7 +19,6 @@ public class CompanyController implements ICompanyController {
         this.companyServices = companyServices;
     }
 
-
     @Override
     @PostMapping
     public ResponseEntity<CompanyExitDTO> createCompany(@RequestBody CompanyEntryDTO companyEntryDTO) {
