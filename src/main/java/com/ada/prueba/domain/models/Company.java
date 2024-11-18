@@ -69,16 +69,4 @@ public class Company {
         this.versionCompany = versionCompany;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Company that = (Company) o;
-        return Objects.equals(companyName, that.companyName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(companyName);
-    }
 }

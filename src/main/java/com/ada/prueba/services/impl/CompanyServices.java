@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServices implements ICompanyServices {
@@ -42,10 +43,6 @@ public class CompanyServices implements ICompanyServices {
         Version version = versionRepository.findByApplicationAppCodeAndVersion(
                 companyEntryDTO.getAppCode(), companyEntryDTO.getVersion()).orElseThrow(() -> new NotFoundException("Version not found"));
 
-        companyRepository.findByCompanyCode(companyEntryDTO.getCompanyCode()).ifPresent(c -> {
-            throw new AlreadyExistsException("Company with this code already exists");
-        });
-
         Company company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO, version);
 
         VersionCompany versionCompany = new VersionCompany();
@@ -62,8 +59,7 @@ public class CompanyServices implements ICompanyServices {
     @Override
     public List<CompanyExitDTO> getAllCompany() {
         List<Company> companies = companyRepository.findAll();
-        Set<Company> uniqueCompanies = new HashSet<>(companies);
-        return companyMapper.mapCompanyToCompanyExitList(uniqueCompanies.stream().toList());
+        return companies.stream() .distinct() .map(companyMapper::mapCompanyToCompanyExit) .collect(Collectors.toList());
     }
 
     @Override
