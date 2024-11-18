@@ -29,8 +29,6 @@ public class CompanyServices implements ICompanyServices {
     @Autowired
     private VersionRepository versionRepository;
 
-    @Autowired
-    private VersionCompanyRepository versionCompanyRepository;
 
     @Autowired
     private ICompanyMapper companyMapper;
@@ -45,12 +43,6 @@ public class CompanyServices implements ICompanyServices {
 
         Company company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO, version);
 
-        VersionCompany versionCompany = new VersionCompany();
-        versionCompany.setCompany(company);
-        versionCompany.setVersion(version);
-
-        versionCompanyRepository.save(versionCompany);
-
         companyRepository.save(company);
 
         return companyMapper.mapCompanyToCompanyExit(company);
@@ -59,7 +51,7 @@ public class CompanyServices implements ICompanyServices {
     @Override
     public List<CompanyExitDTO> getAllCompany() {
         List<Company> companies = companyRepository.findAll();
-        return companies.stream() .distinct() .map(companyMapper::mapCompanyToCompanyExit) .collect(Collectors.toList());
+        return companies.stream().distinct().map(companyMapper::mapCompanyToCompanyExit) .collect(Collectors.toList());
     }
 
     @Override
@@ -77,13 +69,6 @@ public class CompanyServices implements ICompanyServices {
                 companyEntryDTO.getAppCode(), companyEntryDTO.getVersion()).orElseThrow(() -> new NotFoundException("Version not found"));
 
         company = companyMapper.mapperCompanyEntryToCompany(companyEntryDTO, version);
-
-        VersionCompany versionCompany = versionCompanyRepository.findByCompanyAndVersion(company, version)
-                .orElseThrow(() -> new NotFoundException("VersionCompany not found"));
-        versionCompany.setCompany(company);
-        versionCompany.setVersion(version);
-
-        versionCompanyRepository.save(versionCompany);
 
         companyRepository.save(company);
 

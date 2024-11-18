@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CompanyRepository  extends JpaRepository<Company, Long> {
 
-    @Query("SELECT DISTINCT c FROM Company c LEFT JOIN FETCH c.companyName")
+    @Query("SELECT DISTINCT c FROM Company c")
     List<Company> findAll();
 
     Optional<Company> findByCompanyCode(String companyCode);
